@@ -1,0 +1,18 @@
+{
+  "material-icon-theme.activeIconPack": "react",
+  "material-icon-theme.folders.associations": {
+    "domain": "Job",
+    "infra": "hook",
+    "sqlc": "database",
+    "internal": "network",
+    "mysql": "database",
+    "bridge": "Functions",
+    "erruser": "error",
+    "errDB": "error",
+    "responses": "messages",
+    "success": "Resolver",
+  },
+  "material-icon-theme.hidesExplorerArrows": false,
+  "material-icon-theme.languages.associations": {},
+  "workbench.iconTheme": "material-icon-theme"
+}

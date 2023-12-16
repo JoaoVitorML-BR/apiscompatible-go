@@ -1,0 +1,16 @@
+Comando para rodar o projeto via terminal a partir da pasta cmd:
+go run -mod=mod api/app/main.go
+
+Exemplo validação de email.
+
+(é só adicionar na validationUser.go nos case)
+
+go get github.com/badoux/checkmail
+
+// if err := checkmail.ValidateFormat(user.Email); err != nil {
+//     return errors.New("O e-mail é invalido")
+// }
+
+bcrypt go
+
+para instalar ele: go get golang.org/x/crypto/bcrypt

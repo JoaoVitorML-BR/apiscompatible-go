@@ -1,0 +1,3 @@
+paths:
+  /:
+    url: /swagger/swagger.yaml
