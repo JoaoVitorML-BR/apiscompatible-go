@@ -1,12 +1,12 @@
 package router
 
 import (
-	"login/cmd/controllers"
+	"login/application/controllers"
 	"net/http"
 )
 
 var RouterUsersLogin = Router{
-    URI:         "/user/login",
+    URI:         "/login",
     MethodRouter: http.MethodPost,
     FuncRouter:   controllers.Login,
     AuthRouter:   false,

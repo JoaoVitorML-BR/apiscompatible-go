@@ -2,10 +2,12 @@ package controllers
 
 import (
 	"encoding/json"
+	"errors"
 	"io/ioutil"
-	"login/cmd/handlers/utils"
-	"login/cmd/handlers/utils/erruser"
-	"login/cmd/handlers/utils/responses"
+	"login/application/handlers/utils"
+	"login/application/handlers/utils/erruser"
+	"login/application/handlers/utils/responses"
+	"login/domain/auth"
 	"login/domain/secure"
 	"login/domain/validation"
 	"login/infra/mysql/bridge"
@@ -132,7 +134,7 @@ func GetUserById(w http.ResponseWriter, r *http.Request) {
 
 	bridge := bridge.New(db)
 
-	userData, err := bridge.FindUserByID(r.Context(), int32(ID))
+	userData, err := bridge.FindUserByID(r.Context(), int64(ID))
 	if err != nil {
 		erruser.ErrMessageSearchUser(w, err)
 		return
@@ -181,6 +183,23 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	userIDToken, err := auth.ExtractUserID(r)
+
+	if err != nil {
+		responses.Err(w, http.StatusUnauthorized, err)
+		return
+	}
+
+	if userIDToken == 0 {
+		responses.Err(w, http.StatusUnauthorized, errors.New("UserID not found in token"))
+		return
+	}
+
+	if ID != userIDToken {
+		responses.Err(w, http.StatusForbidden, errors.New("Action Unauthorized"))
+		return
+	}
+
 	bodyReq, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.Err(w, http.StatusUnprocessableEntity, err)
@@ -218,7 +237,7 @@ func UpdateUser(w http.ResponseWriter, r *http.Request) {
 
 	if err = newQuerie.UpdateUser(r.Context(), bridge.UpdateUserParams{
 		Name: user.Name,
-		ID:   int32(ID),
+		ID:   int64(ID),
 	}); err != nil {
 		responses.Err(w, http.StatusInternalServerError, err)
 		return
@@ -245,12 +264,12 @@ func DeleteUser(w http.ResponseWriter, r *http.Request) {
 
 	bridge := bridge.New(db)
 
-	err = bridge.DeleteUser(r.Context(), int32(ID))
+	err = bridge.DeleteUser(r.Context(), int64(ID))
 	if err != nil {
 		erruser.ErrMessageSearchUser(w, err)
 		return
 	}
 
 	w.WriteHeader(http.StatusOK)
-	responses.Json(w, http.StatusOK, map[string]string{"message": "Usuário deletado com sucesso"})
+	responses.Json(w, http.StatusOK, map[string]string{"message": "User removed success!"})
 }

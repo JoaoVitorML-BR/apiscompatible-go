@@ -3,7 +3,7 @@ package router
 import (
 	"net/http"
 
-	"login/cmd/controllers"
+	"login/application/controllers"
 )
 
 type Router struct {
@@ -31,22 +31,22 @@ var RoutersUsers = []Router{
 		URI: "/user/{id}",
 		MethodRouter: http.MethodGet,
 		FuncRouter: controllers.GetUserById,
-		AuthRouter: false,
+		AuthRouter: true,
 	},{
 		URI: "/userName/{user_name}",
 		MethodRouter: http.MethodGet,
 		FuncRouter: controllers.GetUsersByName,
-		AuthRouter: false,
+		AuthRouter: true,
 	},
 	{
 		URI: "/user/{id}",
 		MethodRouter: http.MethodPut,
 		FuncRouter: controllers.UpdateUser,
-		AuthRouter: false,
+		AuthRouter: true,
 	},{
 		URI: "/user/{id}",
 		MethodRouter: http.MethodDelete,
 		FuncRouter: controllers.DeleteUser,
-		AuthRouter: false,
+		AuthRouter: true,
 	},
 }

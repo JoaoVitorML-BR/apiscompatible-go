@@ -11,8 +11,24 @@
     "errDB": "error",
     "responses": "messages",
     "success": "Resolver",
+    "application": "app",
   },
   "material-icon-theme.hidesExplorerArrows": false,
   "material-icon-theme.languages.associations": {},
-  "workbench.iconTheme": "material-icon-theme"
+  "workbench.iconTheme": "material-icon-theme",
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default",
+        "enableSsl": "Disabled"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "database": "apiscompatiblego",
+      "name": "apiscompatiblego",
+      "username": "root"
+    }
+  ]
 }

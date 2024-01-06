@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
-	"login/cmd/handlers/utils/erruser"
-	"login/cmd/handlers/utils/responses"
+	"login/application/handlers/utils/erruser"
+	"login/application/handlers/utils/responses"
 	"login/domain/auth"
 	"login/domain/secure"
 	"login/infra/mysql/bridge"
@@ -21,7 +21,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		responses.Err(w, http.StatusUnprocessableEntity, err)
 		return
 	}
-
+	
 	var user bridge.FindUserByNameToLoginRow
 	if err = json.Unmarshal(bodyReq, &user); err != nil {
 		responses.Err(w, http.StatusBadRequest, err)
@@ -40,19 +40,20 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	searchUserOnDB, err := newQuerie.FindUserByNameToLogin(r.Context(), user.Name)
 	if err != nil {
 		responses.Err(w, http.StatusInternalServerError, err)
+		fmt.Print("Usuario não encontrado.")
 		return
 	}
 
 	isEqual := secure.ComparePasswordWithHash(string(searchUserOnDB.Password), string(user.Password))
 	if isEqual == nil {
-		fmt.Print("As senhas são iguais \n")
+		fmt.Print("Passowrd is equal \n")
 	} else {
-		fmt.Print("Senha incorreta\n")
-		responses.Err(w, http.StatusUnauthorized, errors.New("Senha incorreta"))
+		fmt.Print("Incorrect Password\n")
+		responses.Err(w, http.StatusUnauthorized, errors.New("Incorrect Password"))
 		return
 	}
-
-	token, _ := auth.GenToken(uint64(user.ID))
+	
+	token, _ := auth.GenToken(uint64(searchUserOnDB.ID))
 
 	fmt.Print(token)
 

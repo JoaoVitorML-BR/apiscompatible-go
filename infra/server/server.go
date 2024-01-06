@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"login/cmd/routes"
+	"login/application/routes"
 	"login/infra/tools/database/config"
 	"net/http"
 )
