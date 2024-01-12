@@ -14,23 +14,32 @@ import (
 	"login/infra/tools/database/errDB"
 	"net/http"
 )
+type LoginResponse struct {
+	Token string               `json:"token"`
+	User  bridge.FindUserByNameToLoginRow   `json:"user"`
+}
 
 func Login(w http.ResponseWriter, r *http.Request) {
 	bodyReq, err := ioutil.ReadAll(r.Body)
 	if err != nil {
 		responses.Err(w, http.StatusUnprocessableEntity, err)
+		fmt.Println("Erro ao ler corpo da solicitação:", err)
 		return
 	}
-	
+
+	fmt.Println(bodyReq)
+
 	var user bridge.FindUserByNameToLoginRow
 	if err = json.Unmarshal(bodyReq, &user); err != nil {
 		responses.Err(w, http.StatusBadRequest, err)
+		fmt.Println("Erro ao deserializar JSON:", err)
 		return
 	}
 
 	db, err := database.DatabaseAPI()
 	if err != nil {
 		errDB.ErrConnectDB(w, err)
+		fmt.Println("Erro ao conectar ao banco de dados:", err)
 		return
 	}
 	defer db.Close()
@@ -40,26 +49,32 @@ func Login(w http.ResponseWriter, r *http.Request) {
 	searchUserOnDB, err := newQuerie.FindUserByNameToLogin(r.Context(), user.Name)
 	if err != nil {
 		responses.Err(w, http.StatusInternalServerError, err)
-		fmt.Print("Usuario não encontrado.")
+		fmt.Println("Erro ao buscar usuário no banco de dados:", err)
 		return
 	}
 
 	isEqual := secure.ComparePasswordWithHash(string(searchUserOnDB.Password), string(user.Password))
 	if isEqual == nil {
-		fmt.Print("Passowrd is equal \n")
+		fmt.Println("Password é igual")
 	} else {
-		fmt.Print("Incorrect Password\n")
-		responses.Err(w, http.StatusUnauthorized, errors.New("Incorrect Password"))
+		fmt.Println("Senha incorreta")
+		responses.Err(w, http.StatusUnauthorized, errors.New("Senha incorreta"))
 		return
 	}
-	
+
 	token, _ := auth.GenToken(uint64(searchUserOnDB.ID))
 
-	fmt.Print(token)
+	fmt.Println("Token gerado:", token)
+
+	loginResponse := LoginResponse{
+		Token: token,
+		User:  searchUserOnDB,
+	}
 
 	w.WriteHeader(http.StatusAccepted)
-	if err := json.NewEncoder(w).Encode(searchUserOnDB); err != nil {
+	if err := json.NewEncoder(w).Encode(loginResponse); err != nil {
 		erruser.ErrMessageConvertUserToJson(w, err)
+		fmt.Println("Erro ao converter resposta para JSON:", err)
 		return
 	}
 }

@@ -18,7 +18,7 @@ func GenToken(userID uint64) (string, error) {
 	permissions := jwt.MapClaims{}
 	permissions["authoried"] = true
 	permissions["exp"] = time.Now().Add(time.Hour * 10).Unix()
-	permissions["id"] = userID // Corrigir para "id"
+	permissions["id"] = userID 
 
 	//Generate the token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, permissions)
@@ -68,6 +68,17 @@ func ValidToken(r *http.Request) error {
 	}
 
 	return errors.New("Token inválido!")
+}
+
+func ValidateTokenHandler(w http.ResponseWriter, r *http.Request) {
+    err := ValidToken(r)
+    if err != nil {
+        http.Error(w, "Token inválido", http.StatusUnauthorized)
+        return
+    }
+
+    w.WriteHeader(http.StatusOK)
+    w.Write([]byte("Token válido"))
 }
 
 func returnKeyCheckToekn(token *jwt.Token) (interface{}, error) {

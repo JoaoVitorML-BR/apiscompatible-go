@@ -3,6 +3,7 @@ package router
 import (
 	"net/http"
 
+	"login/domain/auth"
 	"login/application/controllers"
 )
 
@@ -14,6 +15,12 @@ type Router struct {
 }
 
 var RoutersUsers = []Router{
+	{
+        URI:           "/valid-token",
+        MethodRouter:  http.MethodGet,
+        FuncRouter:    auth.ValidateTokenHandler,
+        AuthRouter:    true,
+    },
 	// User router
 	{
 		URI: "/user",
