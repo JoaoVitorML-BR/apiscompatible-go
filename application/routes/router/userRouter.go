@@ -16,42 +16,42 @@ type Router struct {
 
 var RoutersUsers = []Router{
 	{
-        URI:           "/valid-token",
+        URI:           "/go-api/valid-token",
         MethodRouter:  http.MethodGet,
         FuncRouter:    auth.ValidateTokenHandler,
         AuthRouter:    true,
     },
 	// User router
 	{
-		URI: "/user",
+		URI: "/go-api/user",
 		MethodRouter: http.MethodPost,
 		FuncRouter: controllers.CreatUser,
 		AuthRouter: false,
 	},
 	{
-		URI: "/user",
+		URI: "/go-api/user",
 		MethodRouter: http.MethodGet,
 		FuncRouter: controllers.GetUsers,
 		AuthRouter: false,
 	},
 	{
-		URI: "/user/{id}",
+		URI: "/go-api/user/{id}",
 		MethodRouter: http.MethodGet,
 		FuncRouter: controllers.GetUserById,
 		AuthRouter: true,
 	},{
-		URI: "/userName/{user_name}",
+		URI: "/go-api/userName/{user_name}",
 		MethodRouter: http.MethodGet,
 		FuncRouter: controllers.GetUsersByName,
-		AuthRouter: true,
+		AuthRouter: false,
 	},
 	{
-		URI: "/user/{id}",
+		URI: "/go-api/user/{id}",
 		MethodRouter: http.MethodPut,
 		FuncRouter: controllers.UpdateUser,
 		AuthRouter: true,
 	},{
-		URI: "/user/{id}",
+		URI: "/go-api/user/{id}",
 		MethodRouter: http.MethodDelete,
 		FuncRouter: controllers.DeleteUser,
 		AuthRouter: true,

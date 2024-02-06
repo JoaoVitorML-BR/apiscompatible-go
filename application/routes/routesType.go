@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
-	// "github.com/rs/cors"
 	"login/application/routes/router"
 	"login/domain/middlewares"
 )

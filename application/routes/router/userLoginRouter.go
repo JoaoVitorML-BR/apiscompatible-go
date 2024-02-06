@@ -6,7 +6,7 @@ import (
 )
 
 var RouterUsersLogin = Router{
-    URI:         "/login",
+    URI:         "/go-api/login",
     MethodRouter: http.MethodPost,
     FuncRouter:   controllers.Login,
     AuthRouter:   false,
