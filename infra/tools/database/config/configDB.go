@@ -24,7 +24,7 @@ func LoadInfos() {
 
 	Port, err = strconv.Atoi(os.Getenv("API_PORT"))
 	if err != nil {
-		Port = 8080
+		Port = 9090
 	}
 
 	fmt.Println("DB_USER:", os.Getenv("DB_USER"))
