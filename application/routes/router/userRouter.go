@@ -26,13 +26,13 @@ var RoutersUsers = []Router{
 		URI: "/go-api/user",
 		MethodRouter: http.MethodPost,
 		FuncRouter: controllers.CreatUser,
-		AuthRouter: false,
+		AuthRouter: true,
 	},
 	{
 		URI: "/go-api/user",
 		MethodRouter: http.MethodGet,
 		FuncRouter: controllers.GetUsers,
-		AuthRouter: false,
+		AuthRouter: true,
 	},
 	{
 		URI: "/go-api/user/{id}",
@@ -43,7 +43,7 @@ var RoutersUsers = []Router{
 		URI: "/go-api/userName/{user_name}",
 		MethodRouter: http.MethodGet,
 		FuncRouter: controllers.GetUsersByName,
-		AuthRouter: false,
+		AuthRouter: true,
 	},
 	{
 		URI: "/go-api/user/{id}",
